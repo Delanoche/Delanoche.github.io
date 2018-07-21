@@ -153,7 +153,7 @@
 
       function nameSubmitted(senderId, name) {
         state.players[senderId].name = name;
-        $('li#sender-id-'+senderId+' #player-name').html(name);
+        $('li#sender-id-'+senderId+' #player-name').html(JSON.stringify(name));
       }
 
 
@@ -182,7 +182,6 @@
 
         // Sender connected
         window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
-
           console.log('Sender connected: ' + event.senderId);
           senderConnected(event.senderId);
         });
@@ -198,7 +197,7 @@
           console.log(event);
           switch (event.data.type) {
             case 'NAME_SUBMITTED':
-              nameSubmitted(event.data.senderId, event.data.data);
+              nameSubmitted(event.data.senderId, event);
               break;
             case 'START_GAME':
               window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
