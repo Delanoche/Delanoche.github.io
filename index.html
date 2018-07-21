@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG18
+      DEBUG19
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -202,6 +202,28 @@
         state.players[senderId].votedSenderId = votedSenderId;
       }
 
+      function appendVotes() {
+        state.players.map(function(playerSenderId) {
+          var solution = state.players[playerSenderId].solution;
+          $('#voting-list').append('<li data-sender-id="'+playerSenderId+'">'+solution+' <p id="votes">0</p></li>');
+        });
+      }
+
+      function updateVotes() {
+        var votes = {};
+        Object.keys(state.players).map(function(playerSenderId) {
+          vote = state.players[playerSenderId].votedSenderId;
+          if (vote in votes) {
+            votes[vote] += 1;
+          } else {
+            votes[vote] = 0;
+          }
+        });
+        Object.keys(votes).map(function(votedSenderId) {
+          $('#voting-list li[data-sender-id="'+votedSenderId+'"]').text(votes[votedSenderId]);
+        });
+      }
+
       window.onload = function() {
         switchView('PLAYER_LIST');
         var messageURN = 'urn:x-cast:com.connorhenke.elon';
@@ -269,6 +291,7 @@
                 var solutions = Object.keys(state.players).map(function (playerSenderId) {return {senderId: playerSenderId, solution: state.players[playerSenderId].solution}});
                 window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'ALL_SOLUTIONS_SUBMITTED', data: solutions});
                 switchView('DISPLAY_VOTES');
+                appendSolutions();
               }
               break;
 
@@ -276,6 +299,8 @@
               var senderId = event.senderId;
               var votedSenderId = event.data.data;
               setVoteForSender(senderId, votedSenderId);
+
+              updateVotes();
 
               if (Object.keys(state.players).filter(function (playerSenderId) {return state.players[playerSenderId].votedSenderId !== null}).length == Object.keys(state.players).length) {
                 window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'ALL_VOTES_SUBMITTED'});
