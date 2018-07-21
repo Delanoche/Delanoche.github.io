@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG6
+      DEBUG7
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -52,10 +52,8 @@
       <h1>Selecting a new personality for Elon Musk!</h1>
     </div>
 
-    <div id='solutions-div'>
-      <h1>Solutions! 1+1=Solved World Huger</h1>
-      <ul id='solutions-list'>
-      </ul>
+    <div id='getting-solutions-div'>
+      <h1>Waiting for the world to come up with some solutions!</h1>
     </div>
 
     <div id='voting-div'>
@@ -82,7 +80,7 @@
         'PLAYER_LIST',
         'SELECTING_PROBLEM',
         'SELECTING_ELON',
-        'DISPLAY_SOLUTIONS',
+        'DISPLAY_GETTING_SOLUTIONS',
         'DISPLAY_VOTES',
         'DISPLAY_SCORES'
       ];
@@ -91,6 +89,7 @@
         $('#player-list-div').hide();
         $('#selecting-problem-div').hide();
         $('#selecting-elon-div').hide();
+        $('#getting-solutions-div').hide();
         $('#solutions-div').hide();
         $('#voting-div').hide();
         $('#scores-div').hide();
@@ -104,8 +103,8 @@
           case 'SELECTING_ELON':
             $('#selecting-elon-div').show();
             break;
-          case 'DISPLAY_SOLUTIONS':
-            $('#solutions-div').show();
+          case 'DISPLAY_GETTING_SOLUTIONS':
+            $('#getting-solutions-div').show();
             break;
           case 'DISPLAY_VOTES':
             $('#voting-div').show();
@@ -151,7 +150,7 @@
       function senderConnected(senderId) {
         state.players[senderId] = {
           senderId: senderId,
-          votedSenderID: null,
+          votedSenderId: null,
           name: '',
           score: 0,
           solution: ''
@@ -161,6 +160,7 @@
 
       function senderDisconnected(senderId) {
         state.players = state.players.filter(function(player) {return player.senderId !== senderId});
+        $('li#sender-id[data-sender-id="'+senderId+'"]').remove();
       }
 
       function nameSubmitted(senderId, name) {
@@ -176,9 +176,24 @@
         return state.problemCreatorSenderId;
       }
 
+      function selectElon() {
+        var keys = Object.keys(state.players);
+        keys = keys.splice(keys.indexOf(state.problemCreatorSenderId), 1);
+        var randId = Math.floor(Math.rand() * keys.length);
+        state.elonSenderId = keys[randId];
+        return state.elonSenderId;
+      }
 
       function setProblemStatement(problemStatement) {
         state.problemStatement = problemStatement;
+      }
+
+      function setSolutionForSender(senderId, solution) {
+        state[senderId].solution = solution;
+      }
+
+      function setVoteForSender(senderId, votedSenderId) {
+        state[senderId].votedSenderId = votedSenderId;
       }
 
       window.onload = function() {
@@ -196,8 +211,8 @@
         window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
           console.log('Sender connected: ' + event.senderId);
           senderConnected(event.senderId);
-          if (Object.keys(state.players).length > 2) {
-            window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'MORE_THAN_TWO_PLAYERS_CONNECTED'});
+          if (state.players.filter(function(player) {return player.name !== ''}).length > 1) {
+            window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
           }
         });
 
@@ -208,7 +223,6 @@
         });
 
         // Message listener
-
         window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
           console.log(event);
           $('#current-event').text(event.senderId + ' ' + JSON.stringify(event) + ' ' + event.data.type + ' ' + event.data.data);
@@ -216,14 +230,51 @@
             case 'NAME_SUBMITTED':
               nameSubmitted(event.senderId, event.data.data);
               break;
+
             case 'START_GAME':
               window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
+              
               switchView('SELECTING_PROBLEM');
+              window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'SELECTING_PROBLEM'});
+
               var problemCreatorSenderId = selectProblemCreator();
               window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
               break;
+
             case 'PROBLEM_SUBMITTED':
               setProblemStatement(event.data.data);
+              switchView('SELECTING_ELON');
+              window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'SELECTING_ELON'});
+              var elonSenderId = selectElon();
+              window.castReceiverContext.sendCustomMessage(messageURN, elonSenderId, {type: 'SELECTED_ELON'});
+
+              var normalSenderIds = Object.keys(state.players).filter(function(playerId) {return playerId !== state.elonSenderId});
+              normalSenderIds.forEach(function(normalSenderId) {
+                window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId, {type: 'SELECTED_NORMAL', data: state.problemStatement});
+                switchView('GETTING_GETTING_SOLUTIONS');
+              });
+              break;
+
+            case 'SOLUTION_SUBMITTED':
+              var senderId = event.senderId;
+              setSolutionForSender(senderId, event.data.data);
+
+              if (Object.keys(state.players).filter(function (playerSenderId) {return playerSenderId !== state.problemCreatorSenderId && state.players[playerSenderId].solution !== ''}).length == Object.keys(state.players).length-1) {
+                window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'ALL_SOLUTIONS_SUBMITTED'});
+                switchView('DISPLAY_VOTES');
+              }
+              break;
+
+            case 'VOTE_SUBMITTED':
+              var senderId = event.senderId;
+              var votedSenderId = event.data.data;
+              setVoteForSender(senderId, votedSenderId);
+
+              if (Object.keys(state.players).filter(function (playerSenderId) {return playerSenderId !== stat.problemGiverSenderId && state.players[playerSenderId].votedSenderId !== null}).length == Object.keys(state.players).length-1) {
+                window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'ALL_VOTES_SUBMITTED'});
+                switchView('DISPLAY_SCORES');
+              }
+              break;
 
             default:
               break;
