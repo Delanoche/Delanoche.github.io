@@ -27,12 +27,40 @@
   </head>
 
   <body>
-
+    <h1>SECRET ELON</h1>
     <div id='player-list-div'>
+      <h1>Players</h1>
       <ul id="player-list">
-
       </ul>
     </div>
+
+    <div id='selecting-problem-div'>
+      <h1>Someone is creating a problem, how dare they!</h1>
+    </div>
+
+    <div id='selecting-elon-div'>
+      <h1>Selecting a new personality for Elon Musk!</h1>
+    </div>
+
+    <div id='solutions-div'>
+      <h1>Solutions! 1+1=Solved World Huger</h1>
+      <ul id='solutions-list'>
+      </ul>
+    </div>
+
+    <div id='voting-div'>
+      <h1>Vote! Yay Democracy!</h1>
+      <ul id='voting-list'>
+      </ul>
+    </div>
+
+    <div id='scores-div'>
+      <h1>High Scores!</h1>
+      <ul id='scores-list'>
+      </ul>
+    </div>
+
+
 
     <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -50,6 +78,37 @@
         'DISPLAY_SCORES'
       ];
 
+      function switchView(toView) {
+        $('#player-list-div').hide();
+        $('#selecting-problem-div').hide();
+        $('#selecting-elon-div').hide();
+        $('#solutions-div').hide();
+        $('#voting-div').hide();
+        $('#scores-div').hide();
+        switch (toView) {
+          case 'PLAYER_LIST':
+            $('#player-list-div').show();
+            break;
+          case 'SELECTING_PROBLEM':
+            $('#selecting-problem-div').show();
+            break;
+          case 'SELECTING_ELON':
+            $('#selecting-elon-div').show();
+            break;
+          case 'DISPLAY_SOLUTIONS':
+            $('#solutions-div').show();
+            break;
+          case 'DISPLAY_VOTES':
+            $('#voting-div').show();
+            break;
+          case 'DISPLAY_SCORES':
+            $('#scores-div').show();
+            break;
+          default:
+            break;
+        }
+      }
+
       var baseState = {
         players: [],
         elonSenderId: null,
@@ -62,7 +121,7 @@
           // [senderId: null, name: '', score: '', isProblemCreator: true, isElon: false, solution: '']
         ],
         elonSenderId: null,
-        problemCreatorId: null,
+        problemCreatorSenderId: null,
         problemStatement: ''
       };
 
@@ -109,8 +168,8 @@
       }
 
 
-      function setProblemStatement(senderId, problemStatement) {
-        state['problemStatement'] = problemStatement;
+      function setProblemStatement(problemStatement) {
+        state.problemStatement = problemStatement;
       }
 
       window.onload = function() {
@@ -144,9 +203,13 @@
               break;
             case 'START_GAME':
               window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
+              switchView('SELECTING_PROBLEM');
               var problemCreatorSenderId = selectProblemCreator();
               window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
               break;
+            case 'PROBLEM_SUBMITTED':
+              setProblemStatement(event.data.data);
+
             default:
               break;
           }
