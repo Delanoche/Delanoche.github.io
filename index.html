@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG19
+      DEBUG20
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -224,6 +224,28 @@
         });
       }
 
+      function displayTopVote() {
+        var votes = {};
+        Object.keys(state.players).map(function(playerSenderId) {
+          vote = state.players[playerSenderId].votedSenderId;
+          if (vote in votes) {
+            votes[vote] += 1;
+          } else {
+            votes[vote] = 0;
+          }
+        });
+        var topVotedSenderId = null;
+        var topVotes = null;
+        Object.keys(votes).map(function(votedSenderId) {
+          if (topVotes === null || topVotes < votes[votedSenderId]) {
+            topVotedSenderId = votedSenderId;
+            topVotes = votes[votedSenderId];
+          }
+        });
+        var topVotedName = state.players[topVotedSenderId].name;
+        $('#top-voted-name').text(topVotedName);
+      }
+
       window.onload = function() {
         switchView('PLAYER_LIST');
         var messageURN = 'urn:x-cast:com.connorhenke.elon';
@@ -305,6 +327,7 @@
               if (Object.keys(state.players).filter(function (playerSenderId) {return state.players[playerSenderId].votedSenderId !== null}).length == Object.keys(state.players).length) {
                 window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'ALL_VOTES_SUBMITTED'});
                 switchView('DISPLAY_SCORES');
+                displayTopVote();
               }
               break;
 
