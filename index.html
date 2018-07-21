@@ -184,7 +184,6 @@
         window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
           console.log('Sender connected: ' + event.senderId);
           senderConnected(event.senderId);
-          window.castReceiverContext.sendCustomMessage(messageURN, event.senderId, {type: 'TEST', data: 'sup bitch'});
         });
 
         // Sender disconnected
@@ -216,6 +215,10 @@
 
         console.log('Starting Receiver Manager');
         window.castReceiverContext.start();
+
+        setTimeout(function() {
+          window.castReceiverContext.sendCustomMessage(messageURN, event.senderId, {type: 'TEST', data: 'sup bitch'});
+        }, 5000);
       };
     </script>
   </body>
