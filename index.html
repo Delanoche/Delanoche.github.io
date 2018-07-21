@@ -196,6 +196,9 @@
         window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
           console.log('Sender connected: ' + event.senderId);
           senderConnected(event.senderId);
+          if (Object.keys(state.players).length > 2) {
+            window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'MORE_THAN_TWO_PLAYERS_CONNECTED'});
+          }
         });
 
         // Sender disconnected
@@ -232,7 +235,7 @@
         window.castReceiverContext.start();
 
         setTimeout(function() {
-          window.castReceiverContext.sendCustomMessage(messageURN, event.senderId, {type: 'TEST', data: 'sup bitch'});
+          window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'TEST', data: 'sup bitch'});
         }, 5000);
       };
     </script>
