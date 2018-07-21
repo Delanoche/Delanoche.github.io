@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG
+      DEBUG2
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -205,7 +205,7 @@
         });
 
         // Message listener
-        try {
+        // try {
           window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
             console.log(event);
             $('#current-event').text(JSON.stringify(event));
@@ -226,10 +226,10 @@
                 break;
             }
           });
-        } catch (err) {
-          console.log(err)
-          $('#error').text(JSON.stringify(err));
-        }
+        // } catch (err) {
+        //   console.log(err)
+        //   $('#error').text(JSON.stringify(err));
+        // }
         
 
         console.log('Starting Receiver Manager');
