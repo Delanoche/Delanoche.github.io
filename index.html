@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG12
+      DEBUG13
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -257,7 +257,7 @@
               var normalSenderIds = Object.keys(state.players).filter(function(playerId) {return playerId !== state.elonSenderId});
               normalSenderIds.forEach(function(normalSenderId) {
                 window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId, {type: 'SELECTED_NORMAL', data: state.problemStatement});
-                switchView('GETTING_GETTING_SOLUTIONS');
+                switchView('DISPLAY_GETTING_SOLUTIONS');
               });
               break;
 
