@@ -26,6 +26,9 @@
 
   <body>
     <h1>SECRET ELON</h1>
+
+    <p id='error'></p>
+
     <div id='player-list-div'>
       <h1>Players</h1>
       <ul id="player-list">
@@ -193,25 +196,31 @@
         });
 
         // Message listener
-        window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
-          console.log(event);
-          switch (event.data.type) {
-            case 'NAME_SUBMITTED':
-              nameSubmitted(event.data.senderId, event);
-              break;
-            case 'START_GAME':
-              window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
-              switchView('SELECTING_PROBLEM');
-              var problemCreatorSenderId = selectProblemCreator();
-              window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
-              break;
-            case 'PROBLEM_SUBMITTED':
-              setProblemStatement(event.data.data);
+        try {
+          window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
+            console.log(event);
+            switch (event.data.type) {
+              case 'NAME_SUBMITTED':
+                nameSubmitted(event.data.senderId, event);
+                break;
+              case 'START_GAME':
+                window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
+                switchView('SELECTING_PROBLEM');
+                var problemCreatorSenderId = selectProblemCreator();
+                window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
+                break;
+              case 'PROBLEM_SUBMITTED':
+                setProblemStatement(event.data.data);
 
-            default:
-              break;
-          }
-        });
+              default:
+                break;
+            }
+          });
+        } catch (err) {
+          console.log(err)
+          $('#error').html(JSON.stringify(err));
+        }
+        
 
         console.log('Starting Receiver Manager');
         window.castReceiverContext.start();
