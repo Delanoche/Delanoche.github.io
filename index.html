@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG11
+      DEBUG12
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -183,7 +183,7 @@
 
       function selectElon() {
         var keys = Object.keys(state.players);
-        keys = keys.splice(keys.indexOf(state.problemCreatorSenderId), 1);
+        keys.splice(keys.indexOf(state.problemCreatorSenderId), 1);
         var randId = Math.floor(Math.random() * keys.length);
         state.elonSenderId = keys[randId];
         $('#elon-sender-id').text(keys[randId]);
