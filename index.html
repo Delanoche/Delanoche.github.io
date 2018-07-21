@@ -205,31 +205,27 @@
         });
 
         // Message listener
-        // try {
-          window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
-            console.log(event);
-            $('#current-event').text('asdf ' + JSON.stringify(event) + ' ' + event.data.type + ' ' + event['data']['type']);
-            switch (event.data.type) {
-              case 'NAME_SUBMITTED':
-                nameSubmitted(event.senderId, event.data.data);
-                break;
-              case 'START_GAME':
-                window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
-                switchView('SELECTING_PROBLEM');
-                var problemCreatorSenderId = selectProblemCreator();
-                window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
-                break;
-              case 'PROBLEM_SUBMITTED':
-                setProblemStatement(event.data.data);
 
-              default:
-                break;
-            }
-          });
-        // } catch (err) {
-        //   console.log(err)
-        //   $('#error').text(JSON.stringify(err));
-        // }
+        window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
+          console.log(event);
+          $('#current-event').text(event.senderId + ' ' + JSON.stringify(event) + ' ' + event.data.type + ' ' + event.data.data);
+          switch (event.data.type) {
+            case 'NAME_SUBMITTED':
+              nameSubmitted(event.senderId, event.data.data);
+              break;
+            case 'START_GAME':
+              window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
+              switchView('SELECTING_PROBLEM');
+              var problemCreatorSenderId = selectProblemCreator();
+              window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
+              break;
+            case 'PROBLEM_SUBMITTED':
+              setProblemStatement(event.data.data);
+
+            default:
+              break;
+          }
+        });
         
 
         console.log('Starting Receiver Manager');
