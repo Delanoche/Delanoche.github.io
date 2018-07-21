@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <style type="text/css">
+    body {
+      overflow:hidden;
+    }
+      div{
+      height:720PX;
+      width:1280PX;
+      text-align:center;
+      border:0px solid silver;
+      display: table-cell;
+      vertical-align:middle;
+      color:#FFFFFF;
+      background-color:#000000;
+      font-weight:bold;
+      font-family:Verdana, Geneva, sans-serif;
+      font-size:40px;
+  }
+    </style>
+    <title>Cast Hello Text</title>
+  </head>
+
+  <body>
+
+    <div id='player-list-div'>
+      <ul id="player-list">
+
+      </ul>
+    </div>
+
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+    <script type="text/javascript">
+
+      var gameViews = [
+        'PLAYER_LIST',
+        'SELECTING_PROBLEM',
+        'SELECTING_ELON',
+        'DISPLAY_SOLUTIONS',
+        'DISPLAY_VOTES',
+        'DISPLAY_SCORES'
+      ];
+
+      var baseState = {
+        players: [],
+        elonSenderId: null,
+        problemStatement: null,
+        view: ''
+      };
+
+      var state = {
+        players: [
+          // [senderId: null, name: '', score: '', isProblemCreator: true, isElon: false, solution: '']
+        ],
+        elon: null,
+        problemStatement: ''
+      };
+
+
+
+      function resetState() {
+        state = baseState;
+      }
+
+      function resetPlayerState() {
+        state.players.forEach(function(player) {
+          player['isProblemCreator'] = false;
+          player['isElon'] = false;
+          player['solution'] = '';
+        });
+      }
+
+      function senderConnected(senderId) {
+        state.players[senderId] = {
+          senderId: senderId,
+          name: '',
+          score: 0,
+          isProblemCreator: false,
+          isElon: false,
+          solution: ''
+        };
+        $('#player-list').append('<li id="sender-id-'+senderId+'">'+senderId+': <p id="player-name"></p></li>');
+      }
+
+      function senderDisconnected(senderId) {
+        state.players = state.players.filter(function(player) {return player.senderId !== senderId});
+      }
+
+      function nameSubmitted(senderId, name) {
+        state.players[senderId].name = name;
+        $('li#sender-id-'+senderId+' #player-name').html(name);
+      }
+
+      function setProblemStatement(problemStatement) {
+        state['problemStatement'] = problemStatement;
+      }
+
+      function handleEvent(event) {
+        switch (event.data.type) {
+            case 'NAME_SUBMITTED':
+              nameSubmitted(event.data.senderId, event.data.data);
+              break;
+            default:
+              break;
+          }
+      }
+
+      window.onload = function() {
+        window.castReceiverContext = cast.framework.CastReceiverContext.getInstance();
+        window.castReceiverContext.setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
+
+        window.castReceiverContext.addEventListener(cast.framework.system.READY, function() {
+          resetState();
+        });
+
+        // Sender connected
+        window.castReceiverContext.addEventListener(cast.framework.system.SENDER_CONNECTED, function(senderId, userAgent) {
+          console.log('Sender connected: ' + senderId);
+          senderConnected(senderId);
+        });
+
+        // Sender disconnected
+        window.castReceiverContext.addEventListener(cast.framework.system.SENDER_DISCONNECTED, function(senderId, userAgent, reason) {
+          console.log('Sender disconnected: ' + senderId);
+          senderDisconnected(senderId);
+        });
+
+        // Message listener
+        window.castReceiverContext.addCustomMessageListener('urn:x-cast:com.connorhenke.elon', function(event) {
+          console.log(event);
+          handleEvent(event);
+        });
+
+        console.log('Starting Receiver Manager');
+        window.castReceiverContext.start();
+      };
+    </script>
+  </body>
+</html>
