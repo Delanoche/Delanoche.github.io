@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG20
+      DEBUG21
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -67,9 +67,8 @@
     </div>
 
     <div id='scores-div'>
-      <h1>High Scores!</h1>
-      <ul id='scores-list'>
-      </ul>
+      <h1>You've been voted!</h1>
+      <h1 id="top-voted-name">
     </div>
 
 
@@ -203,7 +202,7 @@
       }
 
       function appendVotes() {
-        state.players.map(function(playerSenderId) {
+        Object.keys(state.players).map(function(playerSenderId) {
           var solution = state.players[playerSenderId].solution;
           $('#voting-list').append('<li data-sender-id="'+playerSenderId+'">'+solution+' <p id="votes">0</p></li>');
         });
