@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG9
+      DEBUG10
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -238,7 +238,7 @@
               window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'SELECTING_PROBLEM'});
 
               var problemCreatorSenderId = selectProblemCreator();
-              window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
+              window.castReceiverContext.sendCustomMessage(messageURN, problemCreatorSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
               break;
 
             case 'PROBLEM_SUBMITTED':
