@@ -176,18 +176,18 @@
         window.castReceiverContext = cast.framework.CastReceiverContext.getInstance();
         window.castReceiverContext.setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
 
-        window.castReceiverContext.addEventListener(cast.framework.system.READY, function() {
+        window.castReceiverContext.addEventListener(cast.framework.system.EventType.READY, function() {
           resetState();
         });
 
         // Sender connected
-        window.castReceiverContext.addEventListener(cast.framework.system.SENDER_CONNECTED, function(senderId, userAgent) {
+        window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(senderId, userAgent) {
           console.log('Sender connected: ' + senderId);
           senderConnected(senderId);
         });
 
         // Sender disconnected
-        window.castReceiverContext.addEventListener(cast.framework.system.SENDER_DISCONNECTED, function(senderId, userAgent, reason) {
+        window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_DISCONNECTED, function(senderId, userAgent, reason) {
           console.log('Sender disconnected: ' + senderId);
           senderDisconnected(senderId);
         });
