@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG8
+      DEBUG9
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -211,9 +211,6 @@
         window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
           console.log('Sender connected: ' + event.senderId);
           senderConnected(event.senderId);
-          if (Object.keys(state.players).filter(function(playerSenderId) {return state.players[playerSenderId].name !== ''}).length > 1) {
-            window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
-          }
         });
 
         // Sender disconnected
@@ -229,6 +226,9 @@
           switch (event.data.type) {
             case 'NAME_SUBMITTED':
               nameSubmitted(event.senderId, event.data.data);
+              if (Object.keys(state.players).filter(function(playerSenderId) {return state.players[playerSenderId].name !== ''}).length > 1) {
+                window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
+              }
               break;
 
             case 'START_GAME':
