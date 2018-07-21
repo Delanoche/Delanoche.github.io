@@ -208,7 +208,7 @@
         // try {
           window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
             console.log(event);
-            $('#current-event').text(JSON.stringify(event));
+            $('#current-event').text('asdf ' + JSON.stringify(event));
             switch (event.data.type) {
               case 'NAME_SUBMITTED':
                 nameSubmitted(event.data.senderId, event);
