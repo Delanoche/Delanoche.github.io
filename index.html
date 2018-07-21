@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG17
+      DEBUG18
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -277,7 +277,7 @@
               var votedSenderId = event.data.data;
               setVoteForSender(senderId, votedSenderId);
 
-              if (Object.keys(state.players).filter(function (playerSenderId) {return playerSenderId !== stat.problemGiverSenderId && state.players[playerSenderId].votedSenderId !== null}).length == Object.keys(state.players).length-1) {
+              if (Object.keys(state.players).filter(function (playerSenderId) {return state.players[playerSenderId].votedSenderId !== null}).length == Object.keys(state.players).length) {
                 window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'ALL_VOTES_SUBMITTED'});
                 switchView('DISPLAY_SCORES');
               }
