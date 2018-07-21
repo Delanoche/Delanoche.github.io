@@ -31,11 +31,15 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG10
+      DEBUG11
       <br/>
       Error: <p id='error'></p>
       <br/>
       Event: <p id='current-event'></p>
+      <br/>
+      Problem Creator ID: <p id='problem-creator-sender-id'></p>
+      <br/>
+      Elon ID: <p id='elon-sender-id'></p>
     </div>
 
     <div id='player-list-div'>
@@ -171,16 +175,18 @@
 
       function selectProblemCreator() {
         var keys = Object.keys(state.players);
-        var randId = Math.floor(Math.rand() * keys.length);
+        var randId = Math.floor(Math.random() * keys.length);
         state.problemCreatorSenderId = keys[randId];
+        $('#problem-creator-sender-id').text(keys[randId]);
         return state.problemCreatorSenderId;
       }
 
       function selectElon() {
         var keys = Object.keys(state.players);
         keys = keys.splice(keys.indexOf(state.problemCreatorSenderId), 1);
-        var randId = Math.floor(Math.rand() * keys.length);
+        var randId = Math.floor(Math.random() * keys.length);
         state.elonSenderId = keys[randId];
+        $('#elon-sender-id').text(keys[randId]);
         return state.elonSenderId;
       }
 
