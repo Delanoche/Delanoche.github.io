@@ -181,15 +181,16 @@
         });
 
         // Sender connected
-        window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(senderId, userAgent) {
-          console.log('Sender connected: ' + senderId);
-          senderConnected(senderId);
+        window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
+
+          console.log('Sender connected: ' + event.senderId);
+          senderConnected(event.senderId);
         });
 
         // Sender disconnected
-        window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_DISCONNECTED, function(senderId, userAgent, reason) {
-          console.log('Sender disconnected: ' + senderId);
-          senderDisconnected(senderId);
+        window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_DISCONNECTED, function(event) {
+          console.log('Sender disconnected: ' + event.senderId);
+          senderDisconnected(event.senderId);
         });
 
         // Message listener
