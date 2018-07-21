@@ -35,7 +35,7 @@
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+    <script type="text/javascript" src="http://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
     <script type="text/javascript">
 
       var gameViews = [
@@ -58,7 +58,8 @@
         players: [
           // [senderId: null, name: '', score: '', isProblemCreator: true, isElon: false, solution: '']
         ],
-        elon: null,
+        elonSenderId: null,
+        problemCreatorId: null,
         problemStatement: ''
       };
 
@@ -79,10 +80,9 @@
       function senderConnected(senderId) {
         state.players[senderId] = {
           senderId: senderId,
+          votedSenderID: null,
           name: '',
           score: 0,
-          isProblemCreator: false,
-          isElon: false,
           solution: ''
         };
         $('#player-list').append('<li id="sender-id-'+senderId+'">'+senderId+': <p id="player-name"></p></li>');
@@ -97,21 +97,22 @@
         $('li#sender-id-'+senderId+' #player-name').html(name);
       }
 
+
+      function selectProblemCreator() {
+        var keys = Object.keys(state.players);
+        var randId = Math.floor(Math.rand() * keys.length);
+        state.problemCreatorSenderId = keys[randId];
+        return state.problemCreatorSenderId;
+      }
+
+
       function setProblemStatement(problemStatement) {
         state['problemStatement'] = problemStatement;
       }
 
-      function handleEvent(event) {
-        switch (event.data.type) {
-            case 'NAME_SUBMITTED':
-              nameSubmitted(event.data.senderId, event.data.data);
-              break;
-            default:
-              break;
-          }
-      }
-
       window.onload = function() {
+        var messageURN = 'urn:x-cast:com.connorhenke.elon';
+
         window.castReceiverContext = cast.framework.CastReceiverContext.getInstance();
         window.castReceiverContext.setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
 
@@ -132,9 +133,20 @@
         });
 
         // Message listener
-        window.castReceiverContext.addCustomMessageListener('urn:x-cast:com.connorhenke.elon', function(event) {
+        window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
           console.log(event);
-          handleEvent(event);
+          switch (event.data.type) {
+            case 'NAME_SUBMITTED':
+              nameSubmitted(event.data.senderId, event.data.data);
+              break;
+            case 'START_GAME':
+              window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
+              var problemCreatorSenderId = selectProblemCreator();
+              window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'})
+              break;
+            default:
+              break;
+          }
         });
 
         console.log('Starting Receiver Manager');
