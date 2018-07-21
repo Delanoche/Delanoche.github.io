@@ -30,7 +30,13 @@
   <body>
     <h1>SECRET ELON</h1>
 
-    <p id='error'></p>
+    <div id='debug'>
+      DEBUG
+      <br/>
+      Error: <p id='error'></p>
+      <br/>
+      Event: <p id='current-event'></p>
+    </div>
 
     <div id='player-list-div'>
       <h1>Players</h1>
@@ -159,7 +165,7 @@
 
       function nameSubmitted(senderId, name) {
         state.players[senderId].name = name;
-        $('li#sender-id-'+senderId+' #player-name').html(JSON.stringify(name));
+        $('li#sender-id-'+senderId+' #player-name').text(JSON.stringify(name));
       }
 
 
@@ -202,6 +208,7 @@
         try {
           window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
             console.log(event);
+            $('#current-event').text(JSON.stringify(event));
             switch (event.data.type) {
               case 'NAME_SUBMITTED':
                 nameSubmitted(event.data.senderId, event);
@@ -221,7 +228,7 @@
           });
         } catch (err) {
           console.log(err)
-          $('#error').html(JSON.stringify(err));
+          $('#error').text(JSON.stringify(err));
         }
         
 
