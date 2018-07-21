@@ -6,19 +6,22 @@
     body {
       overflow:hidden;
     }
-      div{
+    div{
       height:720PX;
       width:1280PX;
       text-align:center;
       border:0px solid silver;
       display: table-cell;
       vertical-align:middle;
-      color:#FFFFFF;
-      background-color:#000000;
+      color: white;
+      background-color: blue;
       font-weight:bold;
       font-family:Verdana, Geneva, sans-serif;
       font-size:40px;
-  }
+    }
+    ul {
+      color: white;
+    }
     </style>
     <title>Cast Hello Text</title>
   </head>
@@ -106,7 +109,7 @@
       }
 
 
-      function setProblemStatement(problemStatement) {
+      function setProblemStatement(senderId, problemStatement) {
         state['problemStatement'] = problemStatement;
       }
 
@@ -142,7 +145,7 @@
             case 'START_GAME':
               window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
               var problemCreatorSenderId = selectProblemCreator();
-              window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'})
+              window.castReceiverContext.sendCustomMessage(messageURN, problemGiverSenderId, {type: 'CHOSEN_PROBLEM_CREATOR'});
               break;
             default:
               break;
