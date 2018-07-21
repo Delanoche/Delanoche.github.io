@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG13
+      DEBUG14
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -265,7 +265,7 @@
               var senderId = event.senderId;
               setSolutionForSender(senderId, event.data.data);
 
-              if (Object.keys(state.players).filter(function (playerSenderId) {return playerSenderId !== state.problemCreatorSenderId && state.players[playerSenderId].solution !== ''}).length == Object.keys(state.players).length-1) {
+              if (Object.keys(state.players).filter(function (playerSenderId) {return state.players[playerSenderId].solution !== ''}).length == Object.keys(state.players).length) {
                 window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'ALL_SOLUTIONS_SUBMITTED'});
                 switchView('DISPLAY_VOTES');
               }
