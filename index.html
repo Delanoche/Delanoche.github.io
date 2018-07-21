@@ -31,7 +31,7 @@
     <h1>SECRET ELON</h1>
 
     <div id='debug'>
-      DEBUG15
+      DEBUG16
       <br/>
       Error: <p id='error'></p>
       <br/>
@@ -195,11 +195,11 @@
       }
 
       function setSolutionForSender(senderId, solution) {
-        state[senderId].solution = solution;
+        state.players[senderId].solution = solution;
       }
 
       function setVoteForSender(senderId, votedSenderId) {
-        state[senderId].votedSenderId = votedSenderId;
+        state.players[senderId].votedSenderId = votedSenderId;
       }
 
       window.onload = function() {
