@@ -184,6 +184,7 @@
         window.castReceiverContext.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
           console.log('Sender connected: ' + event.senderId);
           senderConnected(event.senderId);
+          window.castReceiverContext.sendCustomMessage(messageURN, event.senderId, {type: 'TEST', data: 'sup bitch'});
         });
 
         // Sender disconnected
