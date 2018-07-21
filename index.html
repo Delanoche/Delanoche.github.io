@@ -3,25 +3,23 @@
 
   <head>
     <style type="text/css">
-    body {
-      overflow:hidden;
-    }
-    div{
-      height:720PX;
-      width:1280PX;
-      text-align:center;
-      border:0px solid silver;
-      display: table-cell;
-      vertical-align:middle;
-      color: white;
-      background-color: blue;
-      font-weight:bold;
-      font-family:Verdana, Geneva, sans-serif;
-      font-size:40px;
-    }
-    ul {
-      color: white;
-    }
+      body {
+        overflow:hidden;
+      }
+      div{
+        text-align:center;
+        border:0px solid silver;
+        display: table-cell;
+        vertical-align:middle;
+        color: white;
+        background-color: blue;
+        font-weight:bold;
+        font-family:Verdana, Geneva, sans-serif;
+        font-size:20px;
+      }
+      ul {
+        color: white;
+      }
     </style>
     <title>Cast Hello Text</title>
   </head>
@@ -63,8 +61,7 @@
 
 
     <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
   crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
     <script type="text/javascript">
@@ -173,6 +170,7 @@
       }
 
       window.onload = function() {
+        switchView('PLAYER_LIST');
         var messageURN = 'urn:x-cast:com.connorhenke.elon';
 
         window.castReceiverContext = cast.framework.CastReceiverContext.getInstance();
@@ -180,7 +178,6 @@
 
         window.castReceiverContext.addEventListener(cast.framework.system.READY, function() {
           resetState();
-          switchView('PLAYER_LIST');
         });
 
         // Sender connected
