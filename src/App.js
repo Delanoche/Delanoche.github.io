@@ -103,14 +103,14 @@ class App extends Component {
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
       console.log('Sender connected: ' + event.senderId);
       const newState = _this.state.players;
-      newState[event.senderId] = {
+      newState.push({
         number: _this.state.players.length + 1,
         senderId: event.senderId,
         votedSenderId: null,
         name: '',
         score: 0,
         solution: ''
-      };
+      });
       _this.setState(() => ({players: newState}));
     });
     // Sender disconnected
