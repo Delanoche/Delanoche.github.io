@@ -153,7 +153,7 @@ class App extends Component {
         case 'PROBLEM_SUBMITTED':
           const senderId = event.senderId;
           const newPlayers = _this.state.players;
-          let currentPlayer = newState.find((player) => player.senderId == event.senderId);
+          let currentPlayer = newPlayers.find((player) => player.senderId == event.senderId);
           currentPlayer.problem = event.data.data;
           _this.setState(() => ({debugText: JSON.stringify(newPlayers)}));
           const numProblems = newPlayers.filter((player) => player.problem != null).length;

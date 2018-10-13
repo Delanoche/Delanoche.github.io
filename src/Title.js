@@ -8,7 +8,7 @@ class Title extends Component {
     super(props);
 
     this.state = {
-      title: 'Secret Elon11',
+      title: 'Secret Elon12',
       subtitle: props.subtitle || 'subtitle'
     };
 
