@@ -139,7 +139,7 @@ class App extends Component {
     });
 
     console.log('Starting Receiver Manager');
-    // window.castReceiverContext.start();
+    window.castReceiverContext.start();
   }
 }
 
