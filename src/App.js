@@ -130,9 +130,7 @@ class App extends Component {
           _this.setState(() => ({players: newState}));
 
           // nameSubmitted(event.senderId, event.data.data);
-          // if (Object.keys(this.state.players).filter(function(playerSenderId) {return this.state.players[playerSenderId].name !== ''}).length > 1) {
-          //   window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
-          // }
+          window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
           break;
         case 'START_GAME':
           // window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
