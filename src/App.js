@@ -124,15 +124,10 @@ class App extends Component {
       // $('#current-event').text(event.senderId + ' ' + JSON.stringify(event) + ' ' + event.data.type + ' ' + event.data.data);
       switch (event.data.type) {
         case 'NAME_SUBMITTED':
-          _this.setState((state) => {
-            let newState = state;
-            newState.players[event.senderId].name = event.data.data;
-            newState.debugText = 'name submitted: ' + event.toString();
-            if (Object.keys(this.state.players).filter(playerSenderId => newState.players[playerSenderId].name !== '').length > 1) {
-              window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
-            }
-            return newState;
-          });
+          const newState = _this.state.players;
+          let player = newState.find((player) => player.senderId == event.senderId);
+          player.name = event.data.data;
+          _this.setState(() => ({players: newState}));
 
           // nameSubmitted(event.senderId, event.data.data);
           // if (Object.keys(this.state.players).filter(function(playerSenderId) {return this.state.players[playerSenderId].name !== ''}).length > 1) {
