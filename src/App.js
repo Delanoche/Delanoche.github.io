@@ -152,6 +152,7 @@ class App extends Component {
           const newPlayers = _this.state.players;
           let currentPlayer = newState.find((player) => player.senderId == event.senderId);
           currentPlayer.problem = event.data.data;
+          _this.setState(() => ({debugText: JSON.stringify(newPlayers)}));
           const numProblems = newPlayers.filter((player) => player.problem != null).length;
           if (numProblems >= newPlayers.length) {
             // select problem person
