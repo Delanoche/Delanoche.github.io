@@ -49,6 +49,7 @@ class App extends Component {
         break;
       case 'VOTES':
         displayedDiv = <Votes solutions={[{text: 'cave submarine', votes: 1},{text: '420 yolo', votes: 420}]} problem='cave problems'/>;
+        break;
     }
 
     return (
@@ -101,19 +102,16 @@ class App extends Component {
     // Sender connected
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
       console.log('Sender connected: ' + event.senderId);
-      _this.setState(state => {
-        let newState = state;
-        newState.players[event.senderId] = {
-          number: state.players.length + 1,
-          senderId: event.senderId,
-          votedSenderId: null,
-          name: '',
-          score: 0,
-          solution: ''
-        };
-        newState.debugText = 'Sender connected: ' + event.senderId + ', state: ' + JSON.stringify(newState);
-        return newState;
-      });
+      const newState = _this.state.players;
+      newState[event.senderId] = {
+        number: _this.state.players.length + 1,
+        senderId: event.senderId,
+        votedSenderId: null,
+        name: '',
+        score: 0,
+        solution: ''
+      };
+      _this.setState(() => ({players: newState}));
     });
     // Sender disconnected
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.SENDER_DISCONNECTED, function(event) {
