@@ -17,7 +17,8 @@ class App extends Component {
       elonSenderId: null,
       problemSenderId: null,
       timer: 0,
-      totalTime: 0
+      totalTime: 0,
+      debugText: ''
     };
 
     this.tick = this.tick.bind(this);
@@ -29,6 +30,7 @@ class App extends Component {
       <div className="App">
         <Background />
         <Title />
+        <p className='debug-text'>Debug{this.state.debugText}</p>
         {/*<Names players={this.state.players} />*/}
         {/*<ProblemSelection />*/}
         {/*<GettingSolutions players={this.state.players} time={this.state.timer} totalTime={this.state.totalTime}/>*/}

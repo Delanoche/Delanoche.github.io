@@ -21,3 +21,8 @@
     left: -35%;
   }
 }
+
+.debug-text {
+  color: #FFFFFF;
+  background-color: #000000;
+}
