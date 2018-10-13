@@ -88,12 +88,12 @@ class App extends Component {
     window.castReceiverContext = window.cast.framework.CastReceiverContext.getInstance();
     window.castReceiverContext.setLoggerLevel(window.cast.framework.LoggerLevel.DEBUG);
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.READY, function() {
-      setTimeout(() => {
-        _this.setState(() => ({
-          currentView: 'PLAYER_LIST',
-          debugText: 'Current view to player list'
-        }));
-      }, 5000);
+      // setTimeout(() => {
+      //   _this.setState(() => ({
+      //     currentView: 'PLAYER_LIST',
+      //     debugText: 'Current view to player list'
+      //   }));
+      // }, 150);
     });
     // Sender connected
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
