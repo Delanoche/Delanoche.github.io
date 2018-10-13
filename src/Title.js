@@ -5,11 +5,13 @@ import './Title.css';
 class Title extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      title: 'Secret Elon2'
-    }
+      title: 'Secret Elon2',
+      subtitle: props.subtitle
+    };
+
 
     this.updateTitle = this.updateTitle.bind(this)
 
@@ -31,6 +33,9 @@ class Title extends Component {
             </div>
             <div className="Title">
               {this.state.title}
+              <div className="subtitle">
+                {this.state.subtitle}
+              </div>
             </div>
           </div>
         </div>

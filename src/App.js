@@ -41,7 +41,7 @@ class App extends Component {
     let displayedDiv = undefined;
     switch (this.state.currentView) {
       case 'TITLE':
-        displayedDiv = <Title />;
+        displayedDiv = <Title subtitle={JSON.stringify(this.state.players)}/>;
         break;
       case 'PLAYER_LIST':
         displayedDiv = <Names players={this.state.players}/>;
@@ -93,7 +93,7 @@ class App extends Component {
           currentView: 'PLAYER_LIST',
           debugText: 'Current view to player list'
         }));
-      }, 5000);
+      }, 20000);
     });
     // Sender connected
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
