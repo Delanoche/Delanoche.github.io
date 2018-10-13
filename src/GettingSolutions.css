@@ -1,0 +1,35 @@
+.grid-container {
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 0.6fr 1.9fr 0.5fr;
+    grid-gap: 1px 1px;
+    grid-template-areas: "Title Title Title Title" "Players Players Players Players" "Timer Timer Timer Timer";
+}
+
+.Timer {
+    grid-area: Timer;
+    width: 100%;
+    background-color: grey;
+    z-index: 1000;
+}
+
+.Bar {
+    height: 30px;
+    background-color: green;
+}
+
+.Title {
+    grid-area: Title;
+    text-shadow: 1px 1px 2px pink;
+    font-family: 'Sofia';
+    font-size: 56px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.Players { grid-area: Players; }

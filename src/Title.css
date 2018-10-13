@@ -1,0 +1,25 @@
+.grid-container {
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-gap: 1px 1px;
+    grid-template-areas: ". . . ." "Image Title Title ." ". . . .";
+}
+
+.Title {
+    grid-area: Title;
+    text-shadow: 1px 1px 2px pink;
+    font-family: 'Sofia';
+    font-size: 72px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.Image {
+    grid-area: Image;
+}

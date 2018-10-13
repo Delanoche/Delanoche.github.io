@@ -1,0 +1,130 @@
+.grid {
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    /*grid-template-columns: 0.7fr 1.3fr 1fr 1fr;*/
+    /*grid-template-rows: 0.7fr 1.3fr 1fr;*/
+    /*grid-gap: 1px 1px;*/
+    /*grid-template-areas: ". . . ." ". players players ." ". . . .";*/
+    /*grid-template-columns: 0.3fr 1.7fr 1.7fr 0.3fr;*/
+    /*grid-template-rows: 0.3fr 2.4fr 0.3fr;*/
+    grid-template-columns: 0.2fr 1.8fr 1.8fr 0.2fr;
+    grid-template-rows: 0.2fr 2.6fr 0.2fr;
+    grid-gap: 1px 1px;
+    grid-template-areas: ". . . ." ". players players ." ". . . .";
+}
+
+.player-icon {
+    height: 10vh;
+    animation: fadein 2s;
+}
+
+.player-holder {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-gap: 1px 1px;
+    grid-template-areas: "top" "bottom";
+    transform: translate(-50%, -50%);
+}
+
+.top {
+    grid-area: top;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bottom {
+    grid-area: bottom;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.players {
+    overflow: hidden;
+    font-family: 'Amatic SC', cursive;
+    list-style: none;
+    font-size: 40px;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    z-index: 101;
+    grid-area: players;
+}
+
+.player-1 {
+    position: absolute;
+    left: 50%;
+    top: 15%;
+}
+
+.player-2 {
+    position: absolute;
+    left: 37%;
+    top: 22%;
+}
+
+.player-3 {
+    position: absolute;
+    left: 63%;
+    top: 22%;
+}
+
+.player-4 {
+    position: absolute;
+    left: 28%;
+    top: 37%;
+}
+
+.player-5 {
+    position: absolute;
+    left: 72%;
+    top: 37%;
+}
+
+.player-6 {
+    position: absolute;
+    left: 28%;
+    top: 63%;
+}
+
+.player-7 {
+    position: absolute;
+    left: 72%;
+    top: 63%;
+}
+
+.player-8 {
+    position: absolute;
+    left: 37%;
+    top: 78%;
+}
+
+.player-9 {
+    position: absolute;
+    left: 63%;
+    top: 78%;
+}
+
+.player-10 {
+    position: absolute;
+    left: 50%;
+    top: 85%;
+}
+
+.player-name {
+    animation: fadein 2s;
+    line-height: 1.5;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}

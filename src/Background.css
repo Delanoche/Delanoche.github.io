@@ -1,0 +1,14 @@
+.background {
+    position: fixed;
+    background: #444444;
+    height: 100vh;
+    width: 100vw;
+}
+
+.shadow {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background: radial-gradient(circle, #00000000, #111111);
+    z-index: 100;
+}
