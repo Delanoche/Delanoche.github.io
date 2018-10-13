@@ -131,7 +131,9 @@ class App extends Component {
           _this.setState(() => ({players: newState}));
 
           // nameSubmitted(event.senderId, event.data.data);
-          window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
+          if (newState.length >= newState.map((player) => player.name !== '' ? 1 : 0).reduce((accumulator, currentValue) => accumulator + currentValue)) {
+            window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
+          }
           break;
         case 'START_GAME':
           window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
@@ -150,18 +152,18 @@ class App extends Component {
           const newPlayers = _this.state.players;
           let currentPlayer = newState.find((player) => player.senderId == event.senderId);
           currentPlayer.problem = event.data.data;
-          const numProblems = _this.state.players.map((player) => player.problem !== null ? 1 : 0).reduce((accumulator, currentValue) => accumulator + currentValue);
-          if (numProblems >= _this.state.players.length) {
+          const numProblems = newPlayers.map((player) => player.problem !== null ? 1 : 0).reduce((accumulator, currentValue) => accumulator + currentValue);
+          if (numProblems >= newPlayers.length) {
             // select problem person
-            const problemPerson = _this.state.players[Math.floor(Math.random()*_this.state.players.length)];
-            const filtered = _this.state.players.filter((player) => player.senderId != problemPerson.senderId)
+            const problemPerson = newPlayers[Math.floor(Math.random()*newPlayers.length)];
+            const filtered = newPlayers.filter((player) => player.senderId != problemPerson.senderId);
             const elon = filtered[Math.floor(Math.random()*filtered.length)];
-            _this.setState(() => ({players: newPlayers, problemSenderId: problemPerson.senderId, problem: problemPerson.problem, elonSenderId: elon.senderid}));
             window.castReceiverContext.sendCustomMessage(messageURN, elon.senderId, {type: 'SELECTED_ELON'});
-            var normalSenderIds = Object.keys(_this.state.players).filter(function(playerId) {return playerId !== _this.state.elonSenderId});
+            let normalSenderIds = newPlayers.filter(function(playerId) {return playerId !== _this.state.elonSenderId});
             normalSenderIds.forEach(function(normalSenderId) {
               window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId, {type: 'SELECTED_NORMAL', data: _this.state.problem});
             });
+            _this.setState(() => ({players: newPlayers, problemSenderId: problemPerson.senderId, problem: problemPerson.problem, elonSenderId: elon.senderid}));
           }
 
           // setProblemStatement(event.data.data);
