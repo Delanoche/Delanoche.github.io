@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Title from './Title.js'
 import Background from './Background.js'
 import Names from './Names.js'
+import Votes from './Votes.js'
 import ProblemSelection from './ProblemSelection.js'
 import GettingSolutions from './GettingSolutions.js'
 import './App.css';
@@ -46,6 +47,8 @@ class App extends Component {
       case 'PLAYER_LIST':
         displayedDiv = <Names players={this.state.players}/>;
         break;
+      case 'VOTES':
+        displayedDiv = <Votes solutions={[{text: 'cave submarine', votes: 1},{text: '420 yolo', votes: 420}]} problem='cave problems'/>;
     }
 
     return (

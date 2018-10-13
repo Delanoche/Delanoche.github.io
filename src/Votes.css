@@ -1,0 +1,35 @@
+.grid-container {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 0.5fr 1.5fr 1.5fr 0.5fr;
+    grid-template-rows: 0.6fr 1.9fr 0.5fr;
+    grid-gap: 1px 1px;
+    grid-template-areas: ". solution-problem solution-problem ." ". solutions-votes solutions-votes ." ". . . .";
+}
+
+.solution-problem {
+    grid-area: solution-problem;
+    text-shadow: 1px 1px 2px pink;
+    font-family: 'Sofia';
+    font-size: 72px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.solutions-votes {
+    flex: 1;
+    overflow: hidden;
+    font-family: 'Amatic SC', cursive;
+    list-style: none;
+    font-size: 40px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    grid-area: problems;
+}
