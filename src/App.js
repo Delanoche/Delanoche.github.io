@@ -128,12 +128,12 @@ class App extends Component {
           const newState = _this.state.players;
           let player = newState.find((player) => player.senderId == event.senderId);
           player.name = event.data.data;
-          _this.setState(() => ({players: newState}));
 
           // nameSubmitted(event.senderId, event.data.data);
-          if (newState.length >= newState.map((player) => player.name !== '' ? 1 : 0).reduce((accumulator, currentValue) => accumulator + currentValue)) {
+          if (newState.filter((player) => player.name != '').length >= newState.length) {
             window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
           }
+          _this.setState(() => ({players: newState}));
           break;
         case 'START_GAME':
           window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'START_GAME'});
@@ -152,7 +152,7 @@ class App extends Component {
           const newPlayers = _this.state.players;
           let currentPlayer = newState.find((player) => player.senderId == event.senderId);
           currentPlayer.problem = event.data.data;
-          const numProblems = newPlayers.map((player) => player.problem !== null ? 1 : 0).reduce((accumulator, currentValue) => accumulator + currentValue);
+          const numProblems = newPlayers.filter((player) => player.problem != null).length;
           if (numProblems >= newPlayers.length) {
             // select problem person
             const problemPerson = newPlayers[Math.floor(Math.random()*newPlayers.length)];
