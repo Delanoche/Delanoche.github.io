@@ -8,6 +8,16 @@ import './App.css';
 
 class App extends Component {
 
+  views = [
+    'TITLE',
+    'PLAYER_LIST',
+    'SELECTING_PROBLEM',
+    'SELECTING_ELON',
+    'DISPLAY_GETTING_SOLUTIONS',
+    'DISPLAY_VOTES',
+    'DISPLAY_SCORES'
+  ];
+
   constructor(props) {
     super(props);
 
@@ -18,7 +28,8 @@ class App extends Component {
       problemSenderId: null,
       timer: 0,
       totalTime: 0,
-      debugText: 'test'
+      debugText: 'test',
+      currentView: 'TITLE'
     };
 
     this.tick = this.tick.bind(this);
@@ -26,10 +37,22 @@ class App extends Component {
   }
 
   render() {
+
+    let displayedDiv = undefined;
+    switch (this.state.currentView) {
+      case 'TITLE':
+        displayedDiv = <Title />;
+        break;
+      case 'PLAYER_LIST':
+        displayedDiv = <Names players={this.state.players}/>;
+        break;
+    }
+
     return (
       <div className="App">
         <Background />
-        <Title />
+        {displayedDiv}
+        {/*<Title />*/}
         <p className='debug-text'>Debug: {this.state.debugText}</p>
         {/*<Names players={this.state.players} />*/}
         {/*<ProblemSelection />*/}
@@ -55,16 +78,20 @@ class App extends Component {
       _this.setState({players: newState, timer: _this.state.timer - 0.016});
       _this.tick();
     }, 16);
-}
+  }
 
   componentDidMount() {
-    this.startTick(60);
-    this.setState({players: [{name: 'Jeffrey', number: 1}, {name: 'Elon', number: 2}, {name: 'Tim', number: 3}, {name: 'Tim', number: 4}, {name: 'Tim', number: 5}, {name: 'Tim', number: 6}, {name: 'Tim', number: 7}, {name: 'Tim', number: 8}, {name: 'Tim', number: 9}, {name: 'Tim', number: 10}]});
+    // this.startTick(60);
+    // this.setState({players: [{name: 'Jeffrey', number: 1}, {name: 'Elon', number: 2}, {name: 'Tim', number: 3}, {name: 'Tim', number: 4}, {name: 'Tim', number: 5}, {name: 'Tim', number: 6}, {name: 'Tim', number: 7}, {name: 'Tim', number: 8}, {name: 'Tim', number: 9}, {name: 'Tim', number: 10}]});
     let messageURN = 'urn:x-cast:com.connorhenke.elon';
     window.castReceiverContext = window.cast.framework.CastReceiverContext.getInstance();
     window.castReceiverContext.setLoggerLevel(window.cast.framework.LoggerLevel.DEBUG);
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.READY, function() {
-      // resetState();
+      setTimeout(() => {
+        this.setState(() => ({
+          currentView: 'PLAYER_LIST'
+        }));
+      }, 5000);
     });
     // Sender connected
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
@@ -88,7 +115,14 @@ class App extends Component {
       // $('#current-event').text(event.senderId + ' ' + JSON.stringify(event) + ' ' + event.data.type + ' ' + event.data.data);
       switch (event.data.type) {
         case 'NAME_SUBMITTED':
-          this.players[event.senderId].name = event.data.data;
+          this.setState((state) => {
+            state.players[event.senderId].name = event.data.data;
+            if (Object.keys(this.state.players).filter(playerSenderId => state.players[playerSenderId].name !== '').length > 1) {
+              window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
+            }
+            return state;
+          });
+
           // nameSubmitted(event.senderId, event.data.data);
           // if (Object.keys(this.state.players).filter(function(playerSenderId) {return this.state.players[playerSenderId].name !== ''}).length > 1) {
           //   window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
