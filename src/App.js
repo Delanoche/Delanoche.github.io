@@ -28,10 +28,10 @@ class App extends Component {
     return (
       <div className="App">
         <Background />
-        {/*<Title />*/}
+        <Title />
         {/*<Names players={this.state.players} />*/}
         {/*<ProblemSelection />*/}
-        <GettingSolutions players={this.state.players} time={this.state.timer} totalTime={this.state.totalTime}/>
+        {/*<GettingSolutions players={this.state.players} time={this.state.timer} totalTime={this.state.totalTime}/>*/}
 
       </div>
     );

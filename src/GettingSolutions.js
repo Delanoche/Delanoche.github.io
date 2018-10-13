@@ -30,8 +30,8 @@ class ProblemSelection extends Component {
     console.log("" + this.props.totalTime + ", " + this.props.time);
     return (
         <div>
-          <div className="grid-container">
-            <div className="Title">
+          <div className="solution-grid">
+            <div className="solution-title">
               {this.state.title}
             </div>
             <div className="Timer">

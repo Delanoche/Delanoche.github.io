@@ -1,11 +1,10 @@
-.grid-container {
+.title-grid {
     display: grid;
     height: 100vh;
-    width: 100vw;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
     grid-gap: 1px 1px;
-    grid-template-areas: ". . . ." "Image Title Title ." ". . . .";
+    grid-template-areas:"Image Title Title .";
 }
 
 .Title {
@@ -22,4 +21,7 @@
 
 .Image {
     grid-area: Image;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -25,7 +25,7 @@ class Title extends Component {
   render() {
     return (
         <div>
-          <div className="grid-container">
+          <div className="title-grid">
             <div className="Image">
               <img src={elon} className="App-logo" alt="logo" />
             </div>
