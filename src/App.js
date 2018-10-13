@@ -50,6 +50,9 @@ class App extends Component {
       case 'VOTES':
         displayedDiv = <Votes solutions={[{text: 'cave submarine', votes: 1},{text: '420 yolo', votes: 420}]} problem='cave problems'/>;
         break;
+      default:
+        displayedDiv = <Title subtitle={JSON.stringify(this.state.players)}/>;
+        break;
     }
 
     return (
@@ -121,7 +124,7 @@ class App extends Component {
     });
     // Message listener
     window.castReceiverContext.addCustomMessageListener(messageURN, function(event) {
-      console.log(event);
+      _this.setState(() => ({debugText: JSON.stringify(event)}));
       // $('#current-event').text(event.senderId + ' ' + JSON.stringify(event) + ' ' + event.data.type + ' ' + event.data.data);
       switch (event.data.type) {
         case 'NAME_SUBMITTED':
