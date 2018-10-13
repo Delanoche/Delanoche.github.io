@@ -155,7 +155,7 @@ class App extends Component {
           const newPlayers = _this.state.players;
           let currentPlayer = newPlayers.find((player) => player.senderId == event.senderId);
           currentPlayer.problem = event.data.data;
-          _this.setState(() => ({debugText: JSON.stringify(newPlayers)}));
+          _this.setState(() => ({debugText: JSON.stringify(newPlayers), players: newPlayers}));
           const numProblems = newPlayers.filter((player) => player.problem != null).length;
           if (numProblems >= newPlayers.length) {
             // select problem person
@@ -167,7 +167,7 @@ class App extends Component {
             normalSenderIds.forEach(function(normalSenderId) {
               window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId, {type: 'SELECTED_NORMAL', data: problemPerson.problem});
             });
-            _this.setState(() => ({players: newPlayers, problemSenderId: problemPerson.senderId, problem: problemPerson.problem, elonSenderId: elon.senderId}));
+            _this.setState(() => ({problemSenderId: problemPerson.senderId, problem: problemPerson.problem, elonSenderId: elon.senderId}));
           }
 
           // setProblemStatement(event.data.data);
