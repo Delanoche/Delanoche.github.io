@@ -75,7 +75,7 @@ class App extends Component {
       // create a recursive loop.
       const newState = _this.state.players;
       newState.push({name: 'Tim', number: _this.state.players.length + 1});
-      _this.setState({players: newState, timer: _this.state.timer - 0.016});
+      _this.setState(() => ({players: newState, timer: _this.state.timer - 0.016}));
       _this.tick();
     }, 16);
   }
@@ -90,7 +90,8 @@ class App extends Component {
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.READY, function() {
       setTimeout(() => {
         _this.setState(() => ({
-          currentView: 'PLAYER_LIST'
+          currentView: 'PLAYER_LIST',
+          debugText: 'Current view to player list'
         }));
       }, 5000);
     });
@@ -98,14 +99,16 @@ class App extends Component {
     window.castReceiverContext.addEventListener(window.cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
       console.log('Sender connected: ' + event.senderId);
       _this.setState(state => {
-        state.players[event.senderId] = {
+        let newState = state;
+        newState.players[event.senderId] = {
           senderId: event.senderId,
           votedSenderId: null,
           name: '',
           score: 0,
           solution: ''
         };
-        return state;
+        newState.debugText = 'Sender connected: ' + event.senderId;
+        return newState;
       });
     });
     // Sender disconnected
@@ -120,11 +123,13 @@ class App extends Component {
       switch (event.data.type) {
         case 'NAME_SUBMITTED':
           _this.setState((state) => {
-            state.players[event.senderId].name = event.data.data;
-            if (Object.keys(this.state.players).filter(playerSenderId => state.players[playerSenderId].name !== '').length > 1) {
+            let newState = state;
+            newState.players[event.senderId].name = event.data.data;
+            newState.debugText = 'name submitted: ' + event.toString();
+            if (Object.keys(this.state.players).filter(playerSenderId => newState.players[playerSenderId].name !== '').length > 1) {
               window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CAN_START_GAME'});
             }
-            return state;
+            return newState;
           });
 
           // nameSubmitted(event.senderId, event.data.data);
