@@ -163,7 +163,7 @@ class App extends Component {
             const filtered = newPlayers.filter((player) => player.senderId != problemPerson.senderId);
             const elon = filtered[Math.floor(Math.random()*filtered.length)];
             window.castReceiverContext.sendCustomMessage(messageURN, elon.senderId, {type: 'SELECTED_ELON'});
-            let normalSenderIds = newPlayers.filter(function(playerId) {return playerId != elon.senderId});
+            let normalSenderIds = newPlayers.filter((player) => player.senderId != elon.senderId);
             normalSenderIds.forEach(function(normalSenderId) {
               window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId, {type: 'SELECTED_NORMAL', data: problemPerson.problem});
             });
