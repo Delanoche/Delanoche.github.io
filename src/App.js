@@ -101,6 +101,7 @@ class App extends Component {
       _this.setState(state => {
         let newState = state;
         newState.players[event.senderId] = {
+          number: state.players.length + 1,
           senderId: event.senderId,
           votedSenderId: null,
           name: '',
