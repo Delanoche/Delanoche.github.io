@@ -10,7 +10,7 @@ class Names extends Component {
   }
 
   render() {
-    const listItems = this.props.players.map((player) =>
+    const listItems = this.props.players && this.props.players.map((player) =>
         <div className={'player-' + player.number + ' player-holder'}>
           <div className="top">
             <img src={elon} className="player-icon" alt="logo" />

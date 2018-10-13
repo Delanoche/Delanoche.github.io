@@ -8,7 +8,7 @@ class Title extends Component {
     super(props)
 
     this.state = {
-      title: 'Secret Elon'
+      title: 'Secret Elon2'
     }
 
     this.updateTitle = this.updateTitle.bind(this)
