@@ -163,11 +163,11 @@ class App extends Component {
             const filtered = newPlayers.filter((player) => player.senderId != problemPerson.senderId);
             const elon = filtered[Math.floor(Math.random()*filtered.length)];
             window.castReceiverContext.sendCustomMessage(messageURN, elon.senderId, {type: 'SELECTED_ELON'});
-            let normalSenderIds = newPlayers.filter(function(playerId) {return playerId !== _this.state.elonSenderId});
+            let normalSenderIds = newPlayers.filter(function(playerId) {return playerId != elon.senderId});
             normalSenderIds.forEach(function(normalSenderId) {
-              window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId, {type: 'SELECTED_NORMAL', data: _this.state.problem});
+              window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId, {type: 'SELECTED_NORMAL', data: problemPerson.problem});
             });
-            _this.setState(() => ({players: newPlayers, problemSenderId: problemPerson.senderId, problem: problemPerson.problem, elonSenderId: elon.senderid}));
+            _this.setState(() => ({players: newPlayers, problemSenderId: problemPerson.senderId, problem: problemPerson.problem, elonSenderId: elon.senderId}));
           }
 
           // setProblemStatement(event.data.data);
