@@ -108,7 +108,7 @@ class App extends Component {
           score: 0,
           solution: ''
         };
-        newState.debugText = 'Sender connected: ' + event.senderId;
+        newState.debugText = 'Sender connected: ' + event.senderId + ', state: ' + newState.toString();
         return newState;
       });
     });
