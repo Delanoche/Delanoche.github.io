@@ -12,7 +12,7 @@ class Votes extends Component {
   render() {
     const listItems = this.props.solutions.map((solution) =>
         <div>
-          <div>{solution.votes} {solution.text}</div>
+          <div>{solution.votes} {solution.solution}</div>
         </div>
     );
     return (

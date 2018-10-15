@@ -8,7 +8,7 @@ class Title extends Component {
     super(props);
 
     this.state = {
-      title: 'Secret Elon15',
+      title: 'Secret Elon',
       subtitle: props.subtitle || 'subtitle'
     };
 
@@ -33,9 +33,9 @@ class Title extends Component {
             </div>
             <div className="Title">
               {this.state.title}
-              <div className="subtitle">
-                {this.state.subtitle}
-              </div>
+              {/*<div className="subtitle">*/}
+                {/*{this.state.subtitle}*/}
+              {/*</div>*/}
             </div>
           </div>
         </div>

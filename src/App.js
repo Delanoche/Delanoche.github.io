@@ -30,7 +30,8 @@ class App extends Component {
       timer: 0,
       totalTime: 0,
       debugText: 'test',
-      currentView: 'TITLE'
+      currentView: 'TITLE',
+      solutions: []
     };
 
     this.tick = this.tick.bind(this);
@@ -48,7 +49,7 @@ class App extends Component {
         displayedDiv = <Names players={this.state.players}/>;
         break;
       case 'VOTES':
-        displayedDiv = <Votes solutions={[{text: 'cave submarine', votes: 1},{text: '420 yolo', votes: 420}]} problem='cave problems'/>;
+        displayedDiv = <Votes solutions={this.state.solutions} problem={this.state.problem}/>;
         break;
       default:
         displayedDiv = <Title subtitle={JSON.stringify(this.state.players)}/>;
@@ -60,7 +61,7 @@ class App extends Component {
         <Background />
         {displayedDiv}
         {/*<Title />*/}
-        <p className='debug-text'>Debug: {this.state.debugText}</p>
+        {/*<p className='debug-text'>Debug: {this.state.debugText}</p>*/}
         {/*<Names players={this.state.players} />*/}
         {/*<ProblemSelection />*/}
         {/*<GettingSolutions players={this.state.players} time={this.state.timer} totalTime={this.state.totalTime}/>*/}
@@ -113,6 +114,7 @@ class App extends Component {
         votedSenderId: null,
         name: '',
         score: 0,
+        votes: 0,
         solution: ''
       });
       _this.setState(() => ({players: newState}));
@@ -151,12 +153,11 @@ class App extends Component {
           window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'CHOSEN_PROBLEM_CREATOR'});
           break;
         case 'PROBLEM_SUBMITTED':
-          const senderId = event.senderId;
           const newPlayers = _this.state.players;
           let currentPlayer = newPlayers.find((player) => player.senderId == event.senderId);
           currentPlayer.problem = event.data.data;
-          _this.setState(() => ({debugText: JSON.stringify(newPlayers), players: newPlayers}));
           const numProblems = newPlayers.filter((player) => player.problem != null).length;
+          let obj = {debugText: JSON.stringify(newPlayers), players: newPlayers};
           if (numProblems >= newPlayers.length) {
             // select problem person
             const problemPerson = newPlayers[Math.floor(Math.random()*newPlayers.length)];
@@ -165,10 +166,13 @@ class App extends Component {
             window.castReceiverContext.sendCustomMessage(messageURN, elon.senderId, {type: 'SELECTED_ELON'});
             let normalSenderIds = newPlayers.filter((player) => player.senderId != elon.senderId);
             normalSenderIds.forEach(function(normalSenderId) {
-              window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId, {type: 'SELECTED_NORMAL', data: problemPerson.problem});
+              window.castReceiverContext.sendCustomMessage(messageURN, normalSenderId.senderId, {type: 'SELECTED_NORMAL', data: problemPerson.problem});
             });
-            _this.setState(() => ({problemSenderId: problemPerson.senderId, problem: problemPerson.problem, elonSenderId: elon.senderId}));
+            obj.problemSenderId = problemPerson.senderId;
+            obj.problem = problemPerson.problem;
+            obj.elonSenderid = elon.senderid;
           }
+          _this.setState(() => (obj));
 
           // setProblemStatement(event.data.data);
           // switchView('SELECTING_ELON');
@@ -182,6 +186,18 @@ class App extends Component {
           // switchView('DISPLAY_GETTING_SOLUTIONS');
           break;
         case 'SOLUTION_SUBMITTED':
+          const solutionPlayers = _this.state.players;
+          let solutionPlayer = solutionPlayers.find((player) => player.senderId == event.senderId);
+          solutionPlayer.solution = event.data.data;
+          const numSolutions = solutionPlayers.filter((player) => player.solution != '').length;
+          let solutionObj = {debugText: JSON.stringify(solutionPlayers), players: solutionPlayers};
+          if (numSolutions >= solutionPlayers.length) {
+            const solutions = solutionPlayers.map((player) => ({senderId: player.senderId, solution: player.solution, votes: 0}));
+            window.castReceiverContext.sendCustomMessage(messageURN, undefined, {type: 'ALL_SOLUTIONS_SUBMITTED', data: solutions});
+            solutionObj.currentView = 'VOTES';
+            solutionObj.solutions = solutions;
+          }
+          _this.setState(() => (solutionObj));
           // var senderId = event.senderId;
           // setSolutionForSender(senderId, event.data.data);
           // if (Object.keys(this.state.players).filter(function (playerSenderId) {return this.state.players[playerSenderId].solution !== ''}).length == Object.keys(this.state.players).length) {
@@ -192,6 +208,16 @@ class App extends Component {
           // }
           break;
         case 'VOTE_SUBMITTED':
+          const votePlayers = _this.state.players;
+          let votedSenderId = event.data.data;
+          let vote = votePlayers.find((vote) => vote.senderId == event.senderId); // who they voted for
+          vote.votedSenderId = votedSenderId;
+          let solutions = votePlayers.map((player) => ({senderId: player.senderId, solution: player.solution, votes: 0}));
+          for (let solution of solutions) {
+            solution.votes = votePlayers.filter((voted) => solution.senderId == voted.votedSenderId).length;
+          }
+          let voteObj = {players: votePlayers, solutions: solutions, debugText: JSON.stringify(solutions)};
+          _this.setState(() => (voteObj));
           // var senderId = event.senderId;
           // var votedSenderId = event.data.data;
           // setVoteForSender(senderId, votedSenderId);
